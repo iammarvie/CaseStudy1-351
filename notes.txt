@@ -1,0 +1,68 @@
+Reference links:
+1. https://www.engineersgarage.com/audio-filters-designing-an-audio-equalizer-7-8/
+2. https://en.wikipedia.org/wiki/Center_frequency
+3. http://learningaboutelectronics.com/Articles/Center-frequency-calculator.php#answer
+
+**do not add to report
+https://r.search.yahoo.com/_ylt=AwrFY0iHZ_5jpK0PmioPxQt.;_ylu=Y29sbwNiZjEEcG9zAzEEdnRp
+ZAMEc2VjA3Ny/RV=2/RE=1677645831/RO=10/RU=https%3a%2f%2fgithub.com%2fkaandincer%2fMulti-
+Band-Equalizer-Design/RK=2/RS=H01Yu1bqkPk54NQZjitHyEKzuEI-
+**************************************************************************************
+
+Plan -
+Circuit connections  
+Our equalizer is designed for using three audio filters:
+
+A high-pass filter for separating the high-frequency elements
+A band-pass filter for separating the mid-range frequency elements
+A low-pass filter for separating low-frequency elements
+
+**********************************************************************
+1) Specify the frequency range for each band:
+
+Band 1: 20 Hz to 200 Hz (approximate center frequency of 60 Hz)
+Band 2: 200 Hz to 2 kHz (approximate center frequency of 600 Hz)
+Band 3: 2 kHz to 10 kHz (approximate center frequency of 6 kHz)
+Band 4: 10 kHz to 20 kHz (approximate center frequency of 15 kHz)
+Band 5: 20 kHz to 20 kHz (approximate center frequency of 20 kHz)
+
+2) Implement the system with combinations of continuous-time frequency-selective filters:
+
+We can use multiple second-order filters to create the desired frequency response for each band.
+For example, we can use a combination of high-pass and low-pass filters to create a band-pass filter for each band.
+We can then adjust the gain of each filtered signal independently.
+Finally, we can sum the filtered signals to obtain the final output.
+
+3) Analyze the frequency response of each frequency band filter:
+
+We can use a tool like MATLAB to analyze the frequency response of each filter.
+The frequency response should show the gain of the filter as a function of frequency.
+We should also analyze the phase response of the filter.
+
+4) Evaluate the total system frequency response:
+
+We can use a tool like MATLAB to sweep complex exponential inputs through the frequency range of interest.
+We can then analyze the output of the system to obtain its frequency response.
+The frequency response should show the gain of the system as a function of frequency.
+
+5) Analyze the impulse response of each frequency band filter:
+
+We can use a tool like MATLAB to analyze the impulse response of each filter.
+The impulse response should show the output of the filter when a delta function is input.
+
+6) Analyze the impulse response of the overall system:
+
+We can use a tool like MATLAB to analyze the impulse response of the entire system.
+The impulse response should show the output of the system when a delta function is input.
+
+************************************************************************************
+WHY DO WE HAVE DIFFERENT RESISTOR AND CAPACITOR VALUES?
+
+*The cut-off frequency of a RC filter is obtained from the well known equation,
+1/(2πRC)
+
+Different resistor and capacitor values are used to achieve different cutoff frequencies for each filter. The cutoff frequency of a filter determines the frequency range that the filter allows to pass through with minimal attenuation.
+
+In the case of a simple RC filter, the cutoff frequency is determined by the resistance and capacitance values. A higher resistance or capacitance value will result in a lower cutoff frequency, and a lower resistance or capacitance value will result in a higher cutoff frequency.
+
+For the band-pass filters in this system, we want to achieve different cutoff frequencies for each filter to capture different frequency ranges of the input signal. Therefore, we use different resistor and capacitor values for each filter to achieve the desired cutoff frequency for each band.
