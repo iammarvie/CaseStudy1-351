@@ -6,6 +6,10 @@
 % *                        :  https://www.mathworks.com/help/
 % *         
 %% Inputs
+%% Input sounds to use
+[giant,fg] = audioread('Giant Steps Bass Cut.wav');
+[BlueinGreen,fb] = audioread('Blue in Green with Siren.wav');
+[SpaceStation,fsp] = audioread('Space Station - Treble Cut.wav');
 
 % Use Inputs from Homework 1 for Lowpass and Highpass DT Circuits:
 R = 1000;      % Ohms
@@ -28,16 +32,11 @@ center3 = sqrt(2000*10000);
 center4 = sqrt(10000*20000);
 center5 = sqrt (20000*20000);
 
-omega_1 = 2*(pi)*(center1);
-omega_2 = 2*(pi)*(center2);
-
 % Set up Step Input:
 t1 = 0:delta_time:25/center1;
 t2 = 0:delta_time:25/center2;
 
 % Input Complex Exponential:
-ce_1 = exp(j*omega_1*t1);
-ce_2 = exp(j*omega_2*t2);
 
 % Filter @ 10 Hz:
 LowpassFilter10Hz = lsim([1/tau], [1 1/tau], ce_1, t1);
