@@ -4,9 +4,7 @@ Reference links:
 3. http://learningaboutelectronics.com/Articles/Center-frequency-calculator.php#answer
 
 **do not add to report
-https://r.search.yahoo.com/_ylt=AwrFY0iHZ_5jpK0PmioPxQt.;_ylu=Y29sbwNiZjEEcG9zAzEEdnRp
-ZAMEc2VjA3Ny/RV=2/RE=1677645831/RO=10/RU=https%3a%2f%2fgithub.com%2fkaandincer%2fMulti-
-Band-Equalizer-Design/RK=2/RS=H01Yu1bqkPk54NQZjitHyEKzuEI-
+https://github.com/kaandincer/Multi-Band-Equalizer-Design/blob/main/CaseStudy1-1.m
 **************************************************************************************
 
 Plan -
