@@ -35,16 +35,31 @@ center4 = sqrt(10000*20000);
 center5 = sqrt (20000*20000); %% High
 gain = [-15,-7,0,7,15];
 %% GIANT STEPS
-input = giant;
-%% TREBLE BOOST (HIGH PASS FILTER)
-[Band1,filt1] = highpass(input,10000,fsound);
-%% UNITY (BAND PASS FILTER)
-[Band2,filt2] = bandpass(input,band2,fsound);
-[Band3,filt3] = bandpass(input,band3,fsound);
-[Band4,filt4] = bandpass(input,band4,fsound);
-%% BASS BOOST (LOW PASS FILTER)
-%LowpassFilter = lsim([1/tau], [1 1/tau], input, t1);
-[Band5,filt5] = lowpass(input,200,fsound);
-%% combined filters
+input_g = giant;
+%TREBLE BOOST (HIGH PASS FILTER)
+[Band1,filt1] = highpass(input_g,10000,fsound);
+%UNITY (BAND PASS FILTER)
+[Band2,filt2] = bandpass(input_g,band2,fsound);
+[Band3,filt3] = bandpass(input_g,band3,fsound);
+[Band4,filt4] = bandpass(input_g,band4,fsound);
+%BASS BOOST (LOW PASS FILTER)
+[Band5,filt5] = lowpass(input_g,200,fsound);
+%combined filters
 Mixer_giant = gain(1)*Band1+gain(2)*Band2+gain(3)*Band3+gain(4)*Band4+gain(5)*Band5;
 sound(Mixer_giant);
+
+%% SPACE STATION
+input_s = SpaceStation;
+%TREBLE BOOST (HIGH PASS FILTER)
+[Band1,filt1] = highpass(input_s,10000,fsound);
+%UNITY (BAND PASS FILTER)
+[Band2,filt2] = bandpass(input_s,band2,fsound);
+[Band3,filt3] = bandpass(input_s,band3,fsound);
+[Band4,filt4] = bandpass(input_s,band4,fsound);
+%BASS BOOST (LOW PASS FILTER)
+[Band5,filt5] = lowpass(input_s,200,fsound);
+%combined filters
+Mixer_space = gain(1)*Band1+gain(2)*Band2+gain(3)*Band3+gain(4)*Band4+gain(5)*Band5;
+sound(Mixer_space);
+sound(input_s);
+

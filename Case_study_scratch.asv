@@ -20,10 +20,10 @@ delta_time = 1/fsound;     % sampling period = 1/sample frequency
 
 % Bands
 band1 = [20 200]; % 20hz to 200hz
-band2 = [200 2000]; % 200hz to 2khz
-band3 = [2000 10000]; % 2khz to 10khz
-band4 = [10000 20000]; % 10khz to 20khz
-band5 = [20000 20000]; % 20khz
+band2 = [200 500]; % 200hz to 2khz
+band3 = [900 1000]; % 2khz to 10khz
+band4 = [2000 5000]; % 10khz to 20khz
+band5 = [10000 20000]; % 20khz
 
 % Center frequencies sqrt(f1*f2)
 center1 = sqrt(20*200); %%low
@@ -33,27 +33,33 @@ center3 = sqrt(2000*10000);
 center4 = sqrt(10000*20000);
 %
 center5 = sqrt (20000*20000); %% High
-
 gain = [-15,-7,0,7,15];
-% Set up Step Input:
-t1 = 0:delta_time:25/center1;
-t2 = 0:delta_time:25/center2;
+%% GIANT STEPS
+input_g = giant;
+%TREBLE BOOST (HIGH PASS FILTER)
+[Band1,filt1] = highpass(input_g,10000,fsound);
+%UNITY (BAND PASS FILTER)
+[Band2,filt2] = bandpass(input_g,band2,fsound);
+[Band3,filt3] = bandpass(input_g,band3,fsound);
+[Band4,filt4] = bandpass(input_g,band4,fsound);
+%BASS BOOST (LOW PASS FILTER)
+[Band5,filt5] = lowpass(input_g,200,fsound);
+%combined filters
+Mixer_giant = gain(1)*Band1+gain(2)*Band2+gain(3)*Band3+gain(4)*Band4+gain(5)*Band5;
+sound(Mixer_giant);
 
-input = giant;
-%% TREBLE BOOST (HIGH PASS FILTER)
-%HighpassFilter = lsim([1 0], [1 1/tau], input, t1);
-[Band1,filt1] = lowpass(input,200,fsound);
-[Band5,filt5] = highpass(input,20000,fsound);
-sound(Band4);
-sound(Band1); %%bass sounds kinda right
-sound(giant);
-%% UNITY (BAND PASS FILTER)
-[Band2,filt2] = bandpass(input,band2,fsound);
-[Band3,filt3] = bandpass(input,band3,fsound);
-[Band4,filt4] = bandpass(input,band4,fsound);
-%% BASS BOOST (LOW PASS FILTER)
-%LowpassFilter = lsim([1/tau], [1 1/tau], input, t1);
-[Band5,filt5] = highpass(input,20000,fsound);
+%% SPACE STATION
+input_s = SpaceStation;
+%TREBLE BOOST (HIGH PASS FILTER)
+[Band1,filt1] = highpass(input_s,10000,fsound);
+%UNITY (BAND PASS FILTER)
+[Band2,filt2] = bandpass(input_s,band2,fsound);
+[Band3,filt3] = bandpass(input_s,band3,fsound);
+[Band4,filt4] = bandpass(input_s,band4,fsound);
+%BASS BOOST (LOW PASS FILTER)
+[Band5,filt5] = lowpass(input_s,200,fsound);
+%combined filters
+Mixer_space = gain(1)*Band1+gain(2)*Band2+gain(3)*Band3+gain(4)*Band4+gain(5)*Band5;
+sound(Mixer_space);
+sound(
 
-%% combined filters
-Mixer = gain(1)*Band1+gain(2)*Band2+gain(3)*Band3+gain(4)*Band4+gain(5)*Band5;
