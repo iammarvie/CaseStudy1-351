@@ -46,6 +46,5 @@ yhigh_fil = filter(bhigh,ahigh,input); %filter
 % LOW PASS FILTER
 ylow_fil = filter(blow,alow,input);
 
-%% TREBLE BOOST (HIGH PASS FILTER)
-%% BASS BOOST (LOW PASS FILTER)
+
 %% 

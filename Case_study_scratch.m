@@ -6,107 +6,60 @@
 % *                        :  https://www.mathworks.com/help/
 % *         
 %% Inputs
+%% Input sounds to use
+[giant,fg] = audioread('Giant Steps Bass Cut.wav');
+[BlueinGreen,fb] = audioread('Blue in Green with Siren.wav');
+[SpaceStation,fsp] = audioread('Space Station - Treble Cut.wav');
 
 % Use Inputs from Homework 1 for Lowpass and Highpass DT Circuits:
 R = 1000;      % Ohms
 C = 5 * 10^-6 ;  % Farads
 tau = R * C;       % seconds
-fsample = 44100;         % sample frequency = 44.1 kHz
-delta_time = 1/fsample;     % sampling period = 1/sample frequency
+fsound = 44100;         % sample frequency = 44.1 kHz
+delta_time = 1/fsound;     % sampling period = 1/sample frequency
 
 % Bands
 band1 = [20 200]; % 20hz to 200hz
-band2 = [200 2000]; % 200hz to 2khz
-band3 = [2000 10000]; % 2khz to 10khz
-band4 = [10000 20000]; % 10khz to 20khz
-band5 = [20000 20000]; % 20khz
+band2 = [200 500]; % 200hz to 2khz
+band3 = [900 1000]; % 2khz to 10khz
+band4 = [2000 5000]; % 10khz to 20khz
+band5 = [10000 20000]; % 20khz
 
 % Center frequencies sqrt(f1*f2)
-center1 = sqrt(20*200);
-center2 = sqrt(200*2000);
+center1 = sqrt(20*200); %%low
+%mid
+center2 = sqrt(200*2000); 
 center3 = sqrt(2000*10000);
 center4 = sqrt(10000*20000);
-center5 = sqrt (20000*20000);
+%
+center5 = sqrt (20000*20000); %% High
+gain = [-15,-7,0,7,15];
+%% GIANT STEPS
+input_g = giant;
+%TREBLE BOOST (HIGH PASS FILTER)
+[Band1,filt1] = highpass(input_g,10000,fsound);
+%UNITY (BAND PASS FILTER)
+[Band2,filt2] = bandpass(input_g,band2,fsound);
+[Band3,filt3] = bandpass(input_g,band3,fsound);
+[Band4,filt4] = bandpass(input_g,band4,fsound);
+%BASS BOOST (LOW PASS FILTER)
+[Band5,filt5] = lowpass(input_g,200,fsound);
+%combined filters
+Mixer_giant = gain(1)*Band1+gain(2)*Band2+gain(3)*Band3+gain(4)*Band4+gain(5)*Band5;
+sound(Mixer_giant);
 
-omega_1 = 2*(pi)*(center1);
-omega_2 = 2*(pi)*(center2);
+%% SPACE STATION
+input_s = SpaceStation;
+%TREBLE BOOST (HIGH PASS FILTER)
+[Band1,filt1] = highpass(input_s,10000,fsound);
+%UNITY (BAND PASS FILTER)
+[Band2,filt2] = bandpass(input_s,band2,fsound);
+[Band3,filt3] = bandpass(input_s,band3,fsound);
+[Band4,filt4] = bandpass(input_s,band4,fsound);
+%BASS BOOST (LOW PASS FILTER)
+[Band5,filt5] = lowpass(input_s,200,fsound);
+%combined filters
+Mixer_space = gain(1)*Band1+gain(2)*Band2+gain(3)*Band3+gain(4)*Band4+gain(5)*Band5;
+sound(Mixer_space);
+sound(input_s);
 
-% Set up Step Input:
-t1 = 0:delta_time:25/center1;
-t2 = 0:delta_time:25/center2;
-
-% Input Complex Exponential:
-ce_1 = exp(j*omega_1*t1);
-ce_2 = exp(j*omega_2*t2);
-
-% Filter @ 10 Hz:
-LowpassFilter10Hz = lsim([1/tau], [1 1/tau], ce_1, t1);
-HighpassFilter10Hz = lsim([1 0], [1 1/tau], ce_1, t1);
-
-figure(1);                                        % Lowpass Filter at 10 HZ
-subplot(3,1,1);
-plot(t1, real(ce_1));
-hold on;
-plot(t1, real(LowpassFilter10Hz));
-hold off;
-legend('Input', 'Output');
-title('LowPass @ 10Hz: Real');
-xlabel('T');
-ylabel('A');
-
-% Imaginary:
-subplot(3,1,2);
-plot(t1, imag(ce_1));
-hold on;
-plot(t1, imag(LowpassFilter10Hz));
-hold off;
-legend('Input', 'Output');
-title('LowPass @ 10Hz: Imaginary');
-xlabel('T');
-ylabel('A');
-
-% Complex Magnitude:
-subplot(3,1,3);
-plot(t1, abs(ce_1));
-hold on;
-plot(t1, abs(LowpassFilter10Hz));
-hold off;
-legend('Input', 'Output');
-title('LowPass @ 10Hz: Complex Magnitude');
-ylim([0 1.1]);
-xlabel('T');
-ylabel('A');
-
-figure(2);                                       % Highpass Filter at 10 HZ
-subplot(3,1,1);
-plot(t1, real(ce_1));
-hold on;
-plot(t1, real(HighpassFilter10Hz));
-hold off;
-legend('Input', 'Output');
-title('HighPass @ 10Hz: Real');
-xlabel('T');
-ylabel('A');
-
-% Imaginary:
-subplot(3,1,2);
-plot(t1, imag(ce_1));
-hold on;
-plot(t1, imag(HighpassFilter10Hz));
-hold off;
-legend('Input', 'Output');
-title('HighPass @ 10Hz: Imaginary');
-xlabel('T');
-ylabel('A');
-
-% Complex Magnitude:
-subplot(3,1,3);
-plot(t1, abs(ce_1));
-hold on;
-plot(t1, abs(HighpassFilter10Hz));
-hold off;
-legend('Input', 'Output');
-title('HighPass @ 10Hz: Complex Magnitude');
-ylim([0 1.1]);
-xlabel('T');
-ylabel('A');

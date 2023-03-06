@@ -2,6 +2,7 @@ Reference links:
 1. https://www.engineersgarage.com/audio-filters-designing-an-audio-equalizer-7-8/
 2. https://en.wikipedia.org/wiki/Center_frequency
 3. http://learningaboutelectronics.com/Articles/Center-frequency-calculator.php#answer
+4. https://www.mathworks.com/help/signal/ref/lowpass.html#d124e104385
 
 **do not add to report
 https://github.com/kaandincer/Multi-Band-Equalizer-Design/blob/main/CaseStudy1-1.m
@@ -20,7 +21,7 @@ A low-pass filter for separating low-frequency elements
 
 Band 1: 20 Hz to 200 Hz (approximate center frequency of 60 Hz)
 Band 2: 200 Hz to 2 kHz (approximate center frequency of 600 Hz)
-Band 3: 2 kHz to 10 kHz (approximate center frequency of 6 kHz)
+Band 3: 2 kHz to 10 kHz (approximate center frequency of 4 kHz)
 Band 4: 10 kHz to 20 kHz (approximate center frequency of 15 kHz)
 Band 5: 20 kHz to 20 kHz (approximate center frequency of 20 kHz)
 
