@@ -9,6 +9,7 @@
 %% Input sounds to use
 [giant,fg] = audioread('Giant Steps Bass Cut.wav');
 [BlueinGreen,fb] = audioread('Blue in Green with Siren.wav');
+sound(BlueinGreen);
 [SpaceStation,fsp] = audioread('Space Station - Treble Cut.wav');
 
 % Use Inputs from Homework 1 for Lowpass and Highpass DT Circuits:
@@ -33,9 +34,10 @@ center3 = sqrt(2000*10000);
 center4 = sqrt(10000*20000);
 %
 center5 = sqrt (20000*20000); %% High
-gain = [-15,-7,0,7,15];
+gain = [1,-3,0,7,0];
 %% GIANT STEPS
 input_g = giant;
+%sound(input_g);
 %TREBLE BOOST (HIGH PASS FILTER)
 [Band1,filt1] = highpass(input_g,10000,fsound);
 %UNITY (BAND PASS FILTER)
@@ -46,7 +48,9 @@ input_g = giant;
 [Band5,filt5] = lowpass(input_g,200,fsound);
 %combined filters
 Mixer_giant = gain(1)*Band1+gain(2)*Band2+gain(3)*Band3+gain(4)*Band4+gain(5)*Band5;
-sound(Mixer_giant);
+filename = 'GiantSteps_filtered.wav';
+audiowrite(filename,Mixer_giant,fsound);
+%sound(Mixer_giant);
 
 %% SPACE STATION
 input_s = SpaceStation;
@@ -60,6 +64,22 @@ input_s = SpaceStation;
 [Band5,filt5] = lowpass(input_s,200,fsound);
 %combined filters
 Mixer_space = gain(1)*Band1+gain(2)*Band2+gain(3)*Band3+gain(4)*Band4+gain(5)*Band5;
-sound(Mixer_space);
-sound(
+filename = 'SpaceStation_filtered.wav';
+audiowrite(filename,Mixer_space,fsound);
+%sound(Mixer_space);
 
+
+%% BLUE IN GREEN
+input_green = BlueinGreen;
+%sound(input_green);
+clear sound
+gain_new = [0,0,0,15,-1];
+[Band1,filt1] = highpass(input_green,10000,fsound);
+[Band2,filt2] = bandpass(input_green,band2,fsound);
+[Band3,filt3] = bandpass(input_green,band3,fsound);
+[Band4,filt4] = bandpass(input_green,band4,fsound);
+[Band5,filt5] = lowpass(input_green,200,fsound);
+Mixer_blue = gain_new(1)*Band1+gain_new(2)*Band2+gain_new(3)*Band3+gain_new(4)*Band4+gain_new(5)*Band5;
+filename = 'BlueinGreen_filtered.wav';
+audiowrite(filename,Mixer_blue,fsound);
+%sound(Mixer_space);
