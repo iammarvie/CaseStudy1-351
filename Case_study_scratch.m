@@ -20,11 +20,11 @@ delta_time = 1/fsound;     % sampling period = 1/sample frequency
 
 % Bands
 band1 = [20 200]; % 20hz to 200hz
-band2 = [200 500]; % 200hz to 2khz
-band3 = [900 1000]; % 2khz to 10khz
-band4 = [2000 5000]; % 10khz to 20khz
-band5 = [10000 20000]; % 20khz
-
+band2 = [200 500]; % 200hz to 500hz
+band3 = [900 1000]; % 900hz to 1khz
+band4 = [2000 5000]; % 2khz to 5khz
+band5 = [10000 20000]; % 10Khz to 20khz
+%{
 % Center frequencies sqrt(f1*f2)
 center1 = sqrt(20*200); %%low
 %mid
@@ -33,6 +33,7 @@ center3 = sqrt(2000*10000);
 center4 = sqrt(10000*20000);
 %
 center5 = sqrt (20000*20000); %% High
+%}
 %% PRESETS
 gain = [1,-1,0,7,0]; %Preset gain
 
@@ -63,19 +64,19 @@ input_g = giant;
 Mixer_giant = gain(1)*Band1+gain(2)*Band2+gain(3)*Band3+gain(4)*Band4+gain(5)*Band5;
 filename = 'GiantSteps_filtered.wav';
 audiowrite(filename,Mixer_giant,fsound);
-%FREQUENCY RESPONSE
+%FREQUENCY RESPONSE OF MIXED SYSTEM
 g_res = fft(Mixer_giant);
 g_res = g_res(1:length(g_res)/2);
 f = [0:length(g_res)-1].*fg./length(g_res);
 figure(1);
 subplot(2,1,1);
-plot(f,abs(g_res));
+plot(f,abs(g_res)); %Magnitude
 title('frequency response of filtered Giant Steps');
 xlabel('Frequency (Hz)');
 ylabel('Magnitude');
 xlim([1,10000]);
 subplot(2,1,2);
-plot(f,angle(g_res));
+plot(f,angle(g_res));%phase
 title('frequency response of filtered Giant Steps');
 xlabel('Frequency (Hz)');
 ylabel('Phase');
@@ -85,8 +86,6 @@ xlim([1,10000]);
 %MAGNITUDE
 
 %PHASE
-%IMPULSE
-
 %% SPACE STATION
 input_s = SpaceStation;
 %TREBLE BOOST (HIGH PASS FILTER)
@@ -134,3 +133,56 @@ audiowrite(filename,Mixer_chelsea,fg);
 % This takes out the cymbals and hi hat drums and just leaves the bassy
 % drums in the give a much more parade and retro tv feel to the anthem.
 
+%% IMPULSE
+impulse = zeros(1,fsound);
+impulse(4) = fsound;
+[Band1_impulse,filt1_impulse] = highpass(impulse,10000,fsound);
+imp_B1 = fft(Band1_impulse);
+imp_B1 = imp_B1(1:length(imp_B1/2));
+%UNITY (BAND PASS FILTER)
+[Band2_impulse,filt2_impulse] = bandpass(impulse,band2,fsound);
+imp_B2 = fft(Band2_impulse);
+imp_B2 = imp_B2(1:length(imp_B2/2));
+[Band3_impulse,filt3_impulse] = bandpass(impulse,band3,fsound);
+imp_B3 = fft(Band3_impulse);
+imp_B3 = imp_B3(1:length(imp_B3/2));
+[Band4_impulse,filt4_impulse] = bandpass(impulse,band4,fsound);
+imp_B4 = fft(Band4_impulse);
+imp_B4 = imp_B4(1:length(imp_B4/2));
+%BASS BOOST (LOW PASS FILTER)
+[Band5_impulse,filt5_impulse] = lowpass(impulse,200,fsound);
+imp_B5 = fft(Band5_impulse);
+imp_B5 = imp_B5(1:length(imp_B5/2));
+f_band_imp = [0:length(imp_B5)-1].*fsound./length(imp_B5);
+%COMBINE BANDS
+Mixer_impulse = Band1_impulse+Band2_impulse+Band3_impulse+Band4_impulse+Band5_impulse;
+imp_res = fft(Mixer_impulse);
+imp_res = imp_res(1:length(imp_res)/2);
+f = [0:length(imp_res)-1].*fg./length(imp_res);
+%Impulse response for combined Bands
+figure(1);
+subplot(2,1,1);
+plot(f,abs(imp_res));
+title('frequency response of filtered Impulse');
+xlabel('Frequency (Hz)');
+ylabel('Magnitude');
+xlim([1,10000]);
+subplot(2,1,2);
+plot(f,angle(imp_res));
+title('frequency response of filtered Impulse');
+xlabel('Frequency (Hz)');
+ylabel('Phase');
+xlim([1,10000]);
+% Impulse response on each band
+figure;
+plot(f_band_imp , abs(imp_B1));
+hold on
+plot(f_band_imp , abs(imp_B2));
+plot(f_band_imp , abs(imp_B3));
+plot(f_band_imp , abs(imp_B4));
+plot(f_band_imp , abs(imp_B5));
+title('frequency response of filtered Impulse on each band');
+xlabel('Frequency (Hz)');
+ylabel('Phase');
+xlim([1,10000]);
+legend('High pass(Band 1)','Band 2','Band 3','Band 4','Low pass (Band 5)');
