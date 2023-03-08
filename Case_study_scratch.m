@@ -47,23 +47,86 @@ gain = [1,-1,0,7,0]; %Preset gain
 %BASS BOOST (LOW PASS FILTER)
 [Band5,filt5] = lowpass(input,200,fsound);
 %combined filters
-Mixer_giant = gain(1)*Band1+gain(2)*Band2+gain(3)*Band3+gain(4)*Band4+gain(5)*Band5;
+Mixer_input = gain(1)*Band1+gain(2)*Band2+gain(3)*Band3+gain(4)*Band4+gain(5)*Band5;
 %}
 %% GIANT STEPS
 input_g = giant;
-%sound(input_g);
-%TREBLE BOOST (HIGH PASS FILTER)
 [Band1,filt1] = highpass(input_g,10000,fsound);
-%UNITY (BAND PASS FILTER)
 [Band2,filt2] = bandpass(input_g,band2,fsound);
 [Band3,filt3] = bandpass(input_g,band3,fsound);
 [Band4,filt4] = bandpass(input_g,band4,fsound);
-%BASS BOOST (LOW PASS FILTER)
 [Band5,filt5] = lowpass(input_g,200,fsound);
 %combined filters
 Mixer_giant = gain(1)*Band1+gain(2)*Band2+gain(3)*Band3+gain(4)*Band4+gain(5)*Band5;
 filename = 'GiantSteps_filtered.wav';
 audiowrite(filename,Mixer_giant,fsound);
+%FREQUENCY RESPONSE OF EACH BAND
+[h1,freq1] = freqz(filt1,512,fsound);
+[h2,freq2] = freqz(filt2,512,fsound);
+[h3,freq3] = freqz(filt3,512,fsound);
+[h4,freq4] = freqz(filt4,512,fsound);
+[h5,freq5] = freqz(filt5,512,fsound);
+%Mag and Phase Band 1 converting magnitude to decibels
+figure;
+subplot(2,1,1);
+plot(freq1, mag2db(abs(h1)));
+title('Band 1 Magnitude');
+xlabel('Frequency');
+ylabel('db');
+subplot(2,1,2);
+plot(freq1, angle(h1)/pi);
+title('Band 1 Angle');
+xlabel('Frequency');
+ylabel('angle');
+%Mag and Phase Band 2
+figure;
+subplot(2,1,1);
+plot(freq2, mag2db(abs(h2)));
+title('Band 2 Magnitude');
+xlabel('Frequency');
+ylabel('db');
+subplot(2,1,2);
+plot(freq2, angle(h2)/pi);
+title('Band 2 Angle');
+xlabel('Frequency');
+ylabel('angle');
+%Mag and Phase Band 3
+figure;
+subplot(2,1,1);
+plot(freq3, mag2db(abs(h3)));
+title('Band 3 Magnitude');
+xlabel('Frequency');
+ylabel('db');
+subplot(2,1,2);
+plot(freq3, angle(h3)/pi);
+title('Band 3Angle');
+xlabel('Frequency');
+ylabel('angle');
+%Mag and Phase Band 4
+figure;
+subplot(2,1,1);
+plot(freq4, mag2db(abs(h4)));
+title('Band 4 Magnitude');
+xlabel('Frequency');
+ylabel('db');
+subplot(2,1,2);
+plot(freq4, angle(h4)/pi);
+title('Band 4 Angle');
+xlabel('Frequency');
+ylabel('angle');
+%Mag and Phase Band 5
+figure;
+subplot(2,1,1);
+plot(freq5, mag2db(abs(h5)));
+title('Band 5 Magnitude');
+xlabel('Frequency');
+ylabel('db');
+subplot(2,1,2);
+plot(freq5, angle(h5)/pi);
+title('Band 5 Angle');
+xlabel('Frequency');
+ylabel('angle');
+
 %FREQUENCY RESPONSE OF MIXED SYSTEM
 g_res = fft(Mixer_giant);
 g_res = g_res(1:length(g_res)/2);
@@ -81,11 +144,6 @@ title('frequency response of filtered Giant Steps');
 xlabel('Frequency (Hz)');
 ylabel('Phase');
 xlim([1,10000]);
-
-
-%MAGNITUDE
-
-%PHASE
 %% SPACE STATION
 input_s = SpaceStation;
 %TREBLE BOOST (HIGH PASS FILTER)
@@ -135,7 +193,7 @@ audiowrite(filename,Mixer_chelsea,fg);
 
 %% IMPULSE
 impulse = zeros(1,fsound);
-impulse(4) = fsound;
+impulse(5) = fsound;
 [Band1_impulse,filt1_impulse] = highpass(impulse,10000,fsound);
 imp_B1 = fft(Band1_impulse);
 imp_B1 = imp_B1(1:length(imp_B1/2));
