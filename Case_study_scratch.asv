@@ -34,7 +34,7 @@ center3 = sqrt(2000*10000);
 center4 = sqrt(10000*20000);
 %
 center5 = sqrt (20000*20000); %% High
-gain = [1,-3,0,7,0];
+gain = [1,-1,0,7,0];
 %% GIANT STEPS
 input_g = giant;
 %sound(input_g);
@@ -50,7 +50,6 @@ input_g = giant;
 Mixer_giant = gain(1)*Band1+gain(2)*Band2+gain(3)*Band3+gain(4)*Band4+gain(5)*Band5;
 filename = 'GiantSteps_filtered.wav';
 audiowrite(filename,Mixer_giant,fsound);
-%sound(Mixer_giant);
 
 %% SPACE STATION
 input_s = SpaceStation;
@@ -66,8 +65,6 @@ input_s = SpaceStation;
 Mixer_space = gain(1)*Band1+gain(2)*Band2+gain(3)*Band3+gain(4)*Band4+gain(5)*Band5;
 filename = 'SpaceStation_filtered.wav';
 audiowrite(filename,Mixer_space,fsound);
-%sound(Mixer_space);
-
 
 %% BLUE IN GREEN
 input_green = BlueinGreen;
@@ -82,4 +79,23 @@ gain_new = [0,0,0,15,-1];
 Mixer_blue = gain_new(1)*Band1+gain_new(2)*Band2+gain_new(3)*Band3+gain_new(4)*Band4+gain_new(5)*Band5;
 filename = 'BlueinGreen_filtered.wav';
 audiowrite(filename,Mixer_blue,fsound);
-%sound(Mixer_space);
+
+%% SOUND CHOICE FILTER: CHELSEA FOOTBALL CLUB ANTHEM
+fg = 44100;
+samples = [1,20*fg];
+[chelsea,fg] = audioread('Chelsea.mp3',samples);
+clear sound
+gain_c = [0,0,0,1,10];
+[Band1,filt1] = highpass(chelsea,10000,fsound);
+[Band2,filt2] = bandpass(chelsea,band2,fsound);
+[Band3,filt3] = bandpass(chelsea,band3,fsound);
+[Band4,filt4] = bandpass(chelsea,band4,fsound);
+[Band5,filt5] = lowpass(chelsea,200,fsound);
+Mixer_chelsea = gain_c(1)*Band1+gain_c(2)*Band2+gain_c(3)*Band3+gain_c(4)*Band4+gain_c(5)*Band5;
+sound(Mixer_chelsea,fg);
+filename = 'Chelsea_filtered.wav';
+audiowrite(filename,Mixer_chelsea,fg);
+
+% This takes out the cymbals and hi hat drums and just leaves the bassy
+% drums in the give a much more parade and retro tv feel to the anthem.
+
