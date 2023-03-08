@@ -9,7 +9,6 @@
 %% Input sounds to use
 [giant,fg] = audioread('Giant Steps Bass Cut.wav');
 [BlueinGreen,fb] = audioread('Blue in Green with Siren.wav');
-sound(BlueinGreen);
 [SpaceStation,fsp] = audioread('Space Station - Treble Cut.wav');
 
 % Use Inputs from Homework 1 for Lowpass and Highpass DT Circuits:
@@ -67,8 +66,16 @@ audiowrite(filename,Mixer_giant,fsound);
 %FREQUENCY RESPONSE
 g_res = fft(Mixer_giant);
 g_res = g_res(1:length(g_res)/2);
-f = [0:length(g_res)-1].*fs./length(g_res(
+f = [0:length(g_res)-1].*fg./length(g_res);
+figure(1);
+plot(f,abs(g_res));
+title('frequency response of filtered Giant Steps');
+xlabel('Frequency (Hz)');
+ylabel('Magnitude');
+xlim([1,10000]);
+
 %MAGNITUDE
+
 %PHASE
 %IMPULSE
 

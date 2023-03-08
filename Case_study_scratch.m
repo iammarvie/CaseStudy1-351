@@ -67,13 +67,23 @@ audiowrite(filename,Mixer_giant,fsound);
 g_res = fft(Mixer_giant);
 g_res = g_res(1:length(g_res)/2);
 f = [0:length(g_res)-1].*fg./length(g_res);
-figure;
+figure(1);
+subplot(2,1,1);
 plot(f,abs(g_res));
 title('frequency response of filtered Giant Steps');
 xlabel('Frequency (Hz)');
 ylabel('Magnitude');
 xlim([1,10000]);
+subplot(2,1,2);
+plot(f,angle(g_res));
+title('frequency response of filtered Giant Steps');
+xlabel('Frequency (Hz)');
+ylabel('Phase');
+xlim([1,10000]);
+
+
 %MAGNITUDE
+
 %PHASE
 %IMPULSE
 
