@@ -9,7 +9,6 @@
 %% Input sounds to use
 [giant,fg] = audioread('Giant Steps Bass Cut.wav');
 [BlueinGreen,fb] = audioread('Blue in Green with Siren.wav');
-sound(BlueinGreen);
 [SpaceStation,fsp] = audioread('Space Station - Treble Cut.wav');
 
 % Use Inputs from Homework 1 for Lowpass and Highpass DT Circuits:
@@ -34,7 +33,21 @@ center3 = sqrt(2000*10000);
 center4 = sqrt(10000*20000);
 %
 center5 = sqrt (20000*20000); %% High
-gain = [1,-1,0,7,0];
+%% PRESETS
+gain = [1,-1,0,7,0]; %Preset gain
+
+%TREBLE BOOST (HIGH PASS FILTER)
+%{
+[Band1,filt1] = highpass(input,10000,fsound);
+%UNITY (BAND PASS FILTER)
+[Band2,filt2] = bandpass(input,band2,fsound);
+[Band3,filt3] = bandpass(input,band3,fsound);
+[Band4,filt4] = bandpass(input,band4,fsound);
+%BASS BOOST (LOW PASS FILTER)
+[Band5,filt5] = lowpass(input,200,fsound);
+%combined filters
+Mixer_giant = gain(1)*Band1+gain(2)*Band2+gain(3)*Band3+gain(4)*Band4+gain(5)*Band5;
+%}
 %% GIANT STEPS
 input_g = giant;
 %sound(input_g);
@@ -50,6 +63,19 @@ input_g = giant;
 Mixer_giant = gain(1)*Band1+gain(2)*Band2+gain(3)*Band3+gain(4)*Band4+gain(5)*Band5;
 filename = 'GiantSteps_filtered.wav';
 audiowrite(filename,Mixer_giant,fsound);
+%FREQUENCY RESPONSE
+g_res = fft(Mixer_giant);
+g_res = g_res(1:length(g_res)/2);
+f = [0:length(g_res)-1].*fg./length(g_res);
+figure;
+plot(f,abs(g_res));
+title('frequency response of filtered Giant Steps');
+xlabel('Frequency (Hz)');
+ylabel('Magnitude');
+xlim([1,10000]);
+%MAGNITUDE
+%PHASE
+%IMPULSE
 
 %% SPACE STATION
 input_s = SpaceStation;

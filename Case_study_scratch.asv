@@ -34,7 +34,21 @@ center3 = sqrt(2000*10000);
 center4 = sqrt(10000*20000);
 %
 center5 = sqrt (20000*20000); %% High
-gain = [1,-1,0,7,0];
+%% PRESETS
+gain = [1,-1,0,7,0]; %Preset gain
+
+%TREBLE BOOST (HIGH PASS FILTER)
+%{
+[Band1,filt1] = highpass(input,10000,fsound);
+%UNITY (BAND PASS FILTER)
+[Band2,filt2] = bandpass(input,band2,fsound);
+[Band3,filt3] = bandpass(input,band3,fsound);
+[Band4,filt4] = bandpass(input,band4,fsound);
+%BASS BOOST (LOW PASS FILTER)
+[Band5,filt5] = lowpass(input,200,fsound);
+%combined filters
+Mixer_giant = gain(1)*Band1+gain(2)*Band2+gain(3)*Band3+gain(4)*Band4+gain(5)*Band5;
+%}
 %% GIANT STEPS
 input_g = giant;
 %sound(input_g);
@@ -50,6 +64,13 @@ input_g = giant;
 Mixer_giant = gain(1)*Band1+gain(2)*Band2+gain(3)*Band3+gain(4)*Band4+gain(5)*Band5;
 filename = 'GiantSteps_filtered.wav';
 audiowrite(filename,Mixer_giant,fsound);
+%FREQUENCY RESPONSE
+g_res = fft(Mixer_giant);
+g_res = g_res(1:length(g_res)/2);
+f = [0:length(g_res)-1].*fs./length(g_res(
+%MAGNITUDE
+%PHASE
+%IMPULSE
 
 %% SPACE STATION
 input_s = SpaceStation;
@@ -92,10 +113,9 @@ gain_c = [0,0,0,1,10];
 [Band4,filt4] = bandpass(chelsea,band4,fsound);
 [Band5,filt5] = lowpass(chelsea,200,fsound);
 Mixer_chelsea = gain_c(1)*Band1+gain_c(2)*Band2+gain_c(3)*Band3+gain_c(4)*Band4+gain_c(5)*Band5;
-sound(Mixer_chelsea,fg);
+%sound(Mixer_chelsea,fg);
 filename = 'Chelsea_filtered.wav';
 audiowrite(filename,Mixer_chelsea,fg);
-
 % This takes out the cymbals and hi hat drums and just leaves the bassy
 % drums in the give a much more parade and retro tv feel to the anthem.
 
