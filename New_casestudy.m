@@ -365,6 +365,7 @@ title('frequency response of filtered Impulse');
 xlabel('Frequency (Hz)');
 ylabel('Phase');
 xlim([1,10000]);
+
 % Impulse response on each band
 figure;
 plot(f_band_imp , abs(imp_B1));
