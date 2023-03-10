@@ -337,6 +337,8 @@ Band5 = filter([1 -1],[1 delta_t/tau-1],chelsea); %highpass
 [Band3,filt3_c] = bandpass(chelsea,band3,fsound);
 [Band4,filt4_c] = bandpass(chelsea,band4,fsound);
 Mixer_chelsea = gain_c(1)*Band1+gain_c(2)*Band2+gain_c(3)*Band3+gain_c(4)*Band4+gain_c(5)*Band5;
+filename = 'Chelsea_filtered.wav';
+audiowrite(filename,Mixer_chelsea,fsound);
 %% IMPULSE
 impulse = [1 zeros(1,fsound)];
 [Band1_impulse,filt1_impulse] = highpass(impulse,10000,fsound);
@@ -389,5 +391,5 @@ title('frequency response of filtered Impulse on each band');
 xlabel('Frequency (Hz)');
 ylabel('Phase');
 xlim([1,10000]);
-legend('High pass(Band 1)','Band 2','Band 3','Band 4','Low pass (Band 5)');
+legend('High pass(Band 5)','Band 2','Band 3','Band 4','Low pass (Band 1)');
 
