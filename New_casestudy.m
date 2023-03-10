@@ -38,7 +38,6 @@ center_high = sqrt (10000*20000); %High
 %}
 %% PRESETS
 gain = [1,-1,0,7,0]; %Preset gain
-n = round(fsound*tau*15+2);
 x = [1 zeros(1,fsound)];
 b_low = [0 delta_t/tau]; a_low = [1 delta_t/tau-1];
 b_high = [1 -1]; a_high = [1 delta_t/tau-1];
@@ -47,12 +46,16 @@ Band1 = filter([0 delta_t/tau],[1 delta_t/tau-1],x); %lowpass
 Band5 = filter([1 -1],[1 delta_t/tau-1],x); %highpass
 t1 = 0:delta_t:length(fsound);
 figure;
-subplot(3,1,1);
+subplot(2,1,1);
 plot(t1,Band1);
 title('low pass filter');
-subplot(3,1,2);
+xlabel('time');
+ylabel('output response');
+subplot(2,1,2);
 plot(t1,Band5);
 title('highpass filter');
+xlabel('time');
+ylabel('output response');
 xlim([0 0.08]);
 ylim([-0.005 0]);
 sgtitle('Lowpass and Highpass Presets');
@@ -71,6 +74,8 @@ xlim([0 0.01]);
 plot(t1,Band4);
 xlim([0 0.01]);
 title('Bandpass presets');
+xlabel('time');
+ylabel('output response');
 legend('Band 2','band 3','band 4');
 %combined filters
 Mixer = gain(1)*Band5+gain(2)*Band2+gain(3)*Band3+gain(4)*Band4+gain(5)*Band1;
@@ -159,7 +164,6 @@ plot(freq5, angle(h5)/pi);
 title('Band 5 Angle');
 xlabel('Frequency');
 ylabel('angle');
-
 %% APPLYING PRESETS FILTERS TO GIANT ON STEPS
 input_g = giant;
 input_g = input_g(:,1);
@@ -173,8 +177,6 @@ Band5 = filter([1 -1],[1 delta_t/tau-1],input_g); %highpass
 Mixer_giant = gain(1)*Band1+gain(2)*Band2+gain(3)*Band3+gain(4)*Band4+gain(5)*Band5;
 filename = 'GiantSteps_filtered.wav';
 audiowrite(filename,Mixer_giant,fsound);
-sound(giant,fsound);
-sound(Mixer_giant,fsound);
 % current observations: band1 is a bass booster
 % band2 is a like a soft bass, band3 is meh,band4 is  treble boost,band5 is
 % a volume boost...upon further observation, it seems as though band3 is
@@ -211,7 +213,16 @@ audiowrite(filename,Mixer_blue,fsound);
 %siren was removed at that gain take out the treble and the bass and leave
 %some lower bandpass filter in. this region of filter is low enough to
 %support the piano playing and low enough to filter out the high pitch siren.
-
+%% SPECTROGRAM ON SOUNDS
+figure;
+spectrogram(input_g,1024,200,1024,fsound);
+title('GIANT STEPS SPECTROGRAM');
+figure;
+spectrogram(input_s,1024,200,1024,fsound);
+title('SPACE STATION SPECTROGRAM');
+figure;
+spectrogram(input_green,1024,200,1024,fsound);
+title('BLUE IN GREEN SPECTROGRAM');
 %% FREQUENCY RESPONSE OF EACH BAND FROM GIANT MIXER
 t = (0:1:length(Band1)-1)';
 h_low = tf(b_low,a_low);
