@@ -4,9 +4,6 @@ Reference links:
 3. http://learningaboutelectronics.com/Articles/Center-frequency-calculator.php#answer
 4. https://www.mathworks.com/help/signal/ref/lowpass.html#d124e104385
 
-**do not add to report
-https://github.com/kaandincer/Multi-Band-Equalizer-Design/blob/main/CaseStudy1-1.m
-**************************************************************************************
 
 Plan -
 Circuit connections  

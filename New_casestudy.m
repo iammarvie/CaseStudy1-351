@@ -4,6 +4,11 @@
 % * Date:                     Created 02/26/2023, Last Edited 03/03/2023
 % * With contributions from:  Dr. Jason Trobaugh
 % *                        :  https://www.mathworks.com/help/
+% *                        :  Reference links: 
+%                          :  https://www.engineersgarage.com/audio-filters-designing-an-audio-equalizer-7-8/
+%                          :  https://en.wikipedia.org/wiki/Center_frequency
+%                          :  http://learningaboutelectronics.com/Articles/Center-frequency-calculator.php#answer
+%                          :  https://www.mathworks.com/help/signal/ref/lowpass.html#d124e104385
 % *         
 %% Inputs
 %% Input sounds to use
