@@ -4,6 +4,11 @@
 % * Date:                     Created 02/26/2023, Last Edited 03/03/2023
 % * With contributions from:  Dr. Jason Trobaugh
 % *                        :  https://www.mathworks.com/help/
+% *                        :  Reference links: 
+%                          :  https://www.engineersgarage.com/audio-filters-designing-an-audio-equalizer-7-8/
+%                          :  https://en.wikipedia.org/wiki/Center_frequency
+%                          :  http://learningaboutelectronics.com/Articles/Center-frequency-calculator.php#answer
+%                          :  https://www.mathworks.com/help/signal/ref/lowpass.html#d124e104385
 % *         
 %% Inputs
 %% Input sounds to use
@@ -196,6 +201,44 @@ Mixer_space = gain(1)*Band1+gain(2)*Band2+gain(3)*Band3+gain(4)*Band4+gain(5)*Ba
 filename = 'SpaceStation_filtered.wav';
 audiowrite(filename,Mixer_space,fsound);
 % After filter sounds exteremely horrible
+%%
+%FREQUENCY RESPONSE OF ORIGINAL SYSTEM
+g_res = fft(input_s);
+g_res = g_res(1:length(g_res)/2);
+f = [0:length(g_res)-1].*fg./length(g_res);
+figure;
+subplot(2,1,1);
+plot(f,abs(g_res)); %Magnitude
+title('frequency response of original Space Station');
+xlabel('Frequency (Hz)');
+ylabel('Magnitude');
+xlim([1,10000]);
+subplot(2,1,2);
+plot(f,angle(g_res));%phase
+title('frequency response of original Space Station');
+xlabel('Frequency (Hz)');
+ylabel('Phase');
+xlim([1,10000]);
+
+%FREQUENCY RESPONSE OF MIXED SYSTEM
+g_res2 = fft(Mixer_space);
+g_res2 = g_res2(1:length(g_res2)/2);
+f = [0:length(g_res2)-1].*fg./length(g_res2);
+figure;
+subplot(2,1,1);
+plot(f,abs(g_res2)); %Magnitude
+title('frequency response of filtered Space Station');
+xlabel('Frequency (Hz)');
+ylabel('Magnitude');
+xlim([1,10000]);
+subplot(2,1,2);
+plot(f,angle(g_res2));%phase
+title('frequency response of filtered Space Station');
+xlabel('Frequency (Hz)');
+ylabel('Phase');
+xlim([1,10000]);
+
+
 
 %% APPLYING NEW GAIN TO EQUALIZER AND NEW SOUND
 input_green = BlueinGreen;
@@ -213,6 +256,44 @@ audiowrite(filename,Mixer_blue,fsound);
 %siren was removed at that gain take out the treble and the bass and leave
 %some lower bandpass filter in. this region of filter is low enough to
 %support the piano playing and low enough to filter out the high pitch siren.
+
+%%
+%FREQUENCY RESPONSE OF ORIGINAL SYSTEM
+g_res = fft(input_s);
+g_res = g_res(1:length(g_res)/2);
+f = [0:length(g_res)-1].*fg./length(g_res);
+figure;
+subplot(2,1,1);
+plot(f,abs(g_res)); %Magnitude
+title('frequency response of original BlueinGreen');
+xlabel('Frequency (Hz)');
+ylabel('Magnitude');
+xlim([1,10000]);
+subplot(2,1,2);
+plot(f,angle(g_res));%phase
+title('frequency response of original BlueinGreen');
+xlabel('Frequency (Hz)');
+ylabel('Phase');
+xlim([1,10000]);
+
+%FREQUENCY RESPONSE OF MIXED SYSTEM
+g_res2 = fft(Mixer_space);
+g_res2 = g_res2(1:length(g_res2)/2);
+f = [0:length(g_res2)-1].*fg./length(g_res2);
+figure;
+subplot(2,1,1);
+plot(f,abs(g_res2)); %Magnitude
+title('frequency response of filtered BlueinGreen');
+xlabel('Frequency (Hz)');
+ylabel('Magnitude');
+xlim([1,10000]);
+subplot(2,1,2);
+plot(f,angle(g_res2));%phase
+title('frequency response of filtered BlueinGreen');
+xlabel('Frequency (Hz)');
+ylabel('Phase');
+xlim([1,10000]);
+
 %% SPECTROGRAM ON SOUNDS
 figure;
 spectrogram(input_g,1024,200,1024,fsound);
@@ -227,6 +308,7 @@ title('BLUE IN GREEN SPECTROGRAM');
 t = (0:1:length(Band1)-1)';
 h_low = tf(b_low,a_low);
 h_high = tf(b_high,a_high);
+
 [u1,frequ] = freqz(input_g,512,fsound);
 [h1,freq1] = freqz(Band1,512,fsound);
 [h2,freq2] = freqz(filt2_g,512,fsound);
@@ -307,12 +389,30 @@ plot(freq5, angle(h5)/pi);
 title('Band 5 Angle on Giant steps');
 xlabel('Frequency');
 ylabel('angle');
+%%
+%FREQUENCY RESPONSE OF ORIGINAL SYSTEM
+g_res = fft(input_g);
+g_res = g_res(1:length(g_res)/2);
+f = [0:length(g_res)-1].*fg./length(g_res);
+figure;
+subplot(2,1,1);
+plot(f,abs(g_res)); %Magnitude
+title('frequency response of original Giant Steps');
+xlabel('Frequency (Hz)');
+ylabel('Magnitude');
+xlim([1,10000]);
+subplot(2,1,2);
+plot(f,angle(g_res));%phase
+title('frequency response of original Giant Steps');
+xlabel('Frequency (Hz)');
+ylabel('Phase');
+xlim([1,10000]);
 
 %FREQUENCY RESPONSE OF MIXED SYSTEM
 g_res = fft(Mixer_giant);
 g_res = g_res(1:length(g_res)/2);
 f = [0:length(g_res)-1].*fg./length(g_res);
-figure(1);
+figure;
 subplot(2,1,1);
 plot(f,abs(g_res)); %Magnitude
 title('frequency response of filtered Giant Steps');
@@ -337,6 +437,46 @@ Band5 = filter([1 -1],[1 delta_t/tau-1],chelsea); %highpass
 [Band3,filt3_c] = bandpass(chelsea,band3,fsound);
 [Band4,filt4_c] = bandpass(chelsea,band4,fsound);
 Mixer_chelsea = gain_c(1)*Band1+gain_c(2)*Band2+gain_c(3)*Band3+gain_c(4)*Band4+gain_c(5)*Band5;
+filename = 'Chelsea_filtered.wav';
+audiowrite(filename,Mixer_chelsea,fsound);
+
+%%
+%FREQUENCY RESPONSE OF ORIGINAL SYSTEM
+g_res = fft(chelsea);
+g_res = g_res(1:length(g_res)/2);
+f = [0:length(g_res)-1].*fg./length(g_res);
+figure;
+subplot(2,1,1);
+plot(f,abs(g_res)); %Magnitude
+title('frequency response of original Chelsea');
+xlabel('Frequency (Hz)');
+ylabel('Magnitude');
+xlim([1,10000]);
+subplot(2,1,2);
+plot(f,angle(g_res));%phase
+title('frequency response of original Chelsea');
+xlabel('Frequency (Hz)');
+ylabel('Phase');
+xlim([1,10000]);
+
+%FREQUENCY RESPONSE OF MIXED SYSTEM
+g_res2 = fft(chelsea);
+g_res2 = g_res2(1:length(g_res2)/2);
+f = [0:length(g_res2)-1].*fg./length(g_res2);
+figure;
+subplot(2,1,1);
+plot(f,abs(g_res2)); %Magnitude
+title('frequency response of filtered Chelsea');
+xlabel('Frequency (Hz)');
+ylabel('Magnitude');
+xlim([1,10000]);
+subplot(2,1,2);
+plot(f,angle(g_res2));%phase
+title('frequency response of filtered Chelsea');
+xlabel('Frequency (Hz)');
+ylabel('Phase');
+xlim([1,10000]);
+
 %% IMPULSE
 impulse = [1 zeros(1,fsound)];
 [Band1_impulse,filt1_impulse] = highpass(impulse,10000,fsound);
@@ -363,7 +503,7 @@ imp_res = fft(Mixer_impulse);
 imp_res = imp_res(1:length(imp_res)/2);
 f = [0:length(imp_res)-1].*fg./length(imp_res);
 %Impulse response for combined Bands
-figure(1);
+figure;
 subplot(2,1,1);
 plot(f,abs(imp_res));
 title('frequency response of filtered Impulse');
@@ -389,5 +529,5 @@ title('frequency response of filtered Impulse on each band');
 xlabel('Frequency (Hz)');
 ylabel('Phase');
 xlim([1,10000]);
-legend('High pass(Band 1)','Band 2','Band 3','Band 4','Low pass (Band 5)');
+legend('High pass(Band 5)','Band 2','Band 3','Band 4','Low pass (Band 1)');
 
